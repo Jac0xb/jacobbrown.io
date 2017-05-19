@@ -1,29 +1,38 @@
 
 function funcAnimation() {
 
-    var queryDict = {}
+    // Determining what page the user is looking at.
+    const queryDict = {};
     location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]});
 
-    var pageID = queryDict["page"];
+    const pageID = queryDict["page"];
 
-    const $box = $('#main-wrapper');
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Animation for main wrapper.
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    const $wrapper = $('#main-wrapper');
 
     if (pageID !== "undefined") {
 
-        if (pageID === "bio.php")
-        $box.css('margin', "170px auto auto auto");
-        if (pageID === "portfolio.php") {
-            $box.css('margin', "205px auto auto auto");
+        if (pageID === "bio")
+            $wrapper.css('margin', "170px auto auto auto");
+        if (pageID === "portfolio") {
+            $wrapper.css('margin', "205px auto auto auto");
 
             const $milestones = $('.milestones');
-            $milestones.prependTo($('#main-wrapper')[0]);
+            $milestones.prependTo($wrapper[0]);
         }
     }
 
-    $box.velocity("slideDown", {duration: 1000});
-    $box.velocity( { scale: 1.25, translateY: 50, boxShadowBlur: 35 }, {duration:1000});
+    $wrapper.velocity("slideDown", {duration: 1000});
+    $wrapper.velocity( { scale: 1.25, translateY: 50, boxShadowBlur: 35 }, {duration:1000});
 
-    var $projects = $(".project-overview").each(function(i, obj) {
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Animation for project class elements.
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    $(".project-overview").each(function(i, obj) {
 
         $(obj).velocity({opacity: 1.0}, {delay: 1000, duration: 1000});
 
@@ -33,20 +42,30 @@ function funcAnimation() {
 
     $projectImages.velocity({opacity: 1.0}, {delay:1250, easing: [4]});
 
-    const $title = $("#main-banner-logo p");
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Animation for 'jacobbrown.io' logo.
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    const $title = $("#main-banner-logo").find( "p" );
     $title.velocity({translateY: 20}, {loop:true, duration:7500, delay:2000});
     $title.velocity({translateY: -20}, {loop:true, duration:7500});
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Cave at the bottom of the website animation.
+    ///////////////////////////////////////////////////////////////////////////////////////
 
     const $cave = $(".cls-1");
     $cave.velocity({fill: "#FFFFFF"}, {loop:true, duration:7500,delay:10000})
     .velocity({fill: "#000000"}, {loop:true, duration:7500,delay:10000});
 
 
+    // Timer for createFloaters every 2.5 seconds.
     setInterval(createFloaters, 2500);
 
+    // Creates floaters that traverse the whole of the webpage.
     function createFloaters() {
 
-        var randomImage = ["assets/images/silk_icons/application.png",
+        const randomImage = ["assets/images/silk_icons/application.png",
             "assets/images/silk_icons/application_edit.png",
             "assets/images/silk_icons/application_xp_terminal.png",
             "assets/images/silk_icons/bug_link.png",
@@ -59,12 +78,14 @@ function funcAnimation() {
             "assets/images/silk_icons/user_red.png",
             "assets/images/silk_icons/wrench.png"];
 
-
+        // JQuery generating an image elements.
         const $floater = $('<img class="floaters" style="position:fixed; z-index: -10;  left:-20px; top:100px;" src="assets/images/silk_icons/star.png">');
-        $floater.attr('src', randomImage[GetRandomInt(0, randomImage.length - 1)]);
+        $floater.attr('src', randomImage[RandomInteger(0, randomImage.length - 1)]);
         $floater.appendTo($('#css-jacobbrown')[0]);
 
+        // Animations for floater.
         $floater.velocity({left: '102%'}, {duration: 20000, complete: function() {$floater.remove()}});
+
         upAnimation();
 
         function upAnimation() {
@@ -83,48 +104,50 @@ function funcAnimation() {
 
 }
 
+// Runs when document is loaded.
 $(document).ready(function() {
 
-    var timerArray = {};
-    $navButtons = $("#main-nav li");
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Navigation animations.
+    ///////////////////////////////////////////////////////////////////////////////////////
 
+    const timerArray = {};
+    const $navButtons = $("#main-nav").find("li");
+
+    // Mouse over hook for navigation buttons.
     $navButtons.mouseover(function () {
 
-        var $text = $(this.firstChild);
+        this.style.zIndex = 0;
+        const $text = $(this);
         $text.active = true;
 
-        var randomInt = GetRandomInt(0,10);
+        const randomInt = RandomInteger(0,1000);
 
-        if (randomInt <= 5) {
+        if (randomInt <= 950 ) {
             $text
                 .velocity("stop")
                 .velocity({scale: 2.0}, {queue: false, duration: 500});
         }
-        if (randomInt === 6) {
+        else if (randomInt > 950 && randomInt <= 975) {
             $text
                 .velocity("stop")
-                .velocity({scale: 2.0}, {queue: false, duration: 500});
+                .velocity({scale: 2.0, rotateZ:360}, {queue: false, duration: 500});
         }
-        if (randomInt >= 7 && randomInt <= 8) {
-            $text
-                .velocity("stop")
-                .velocity({scale: 2.0, rotateZ:360}, {duration: 500});
-        }
-        if (randomInt >= 9) {
+        else if (randomInt > 975 && randomInt <= 1000) {
 
-            var colors = ['#ff0000', '#00ff00', '#0000ff'];
+            const ranColors = ['#0000ff', '#00ff00', '#ff0000'];
 
             clearInterval(timerArray[$text.text()]);
             timerArray[$text.text()] = setInterval(changeColor, 100);
 
+            // Changes the font color of the element.
             function changeColor() {
-
 
                 $text.velocity("stop");
 
                 if ($text.active) {
-                    var random_color = colors[Math.floor(Math.random() * colors.length)];
-                    $text.velocity({scale: 2.0, color: random_color, rotateZ: -0}, {duration: 100});
+                    const color = ranColors[RandomInteger(0, 2)];
+                    $text.velocity({scale: 2.0, color: color, rotateZ: -0}, {duration: 100});
                 }
                 else {
                     clearInterval(timerArray[$text.text()]);
@@ -132,16 +155,13 @@ $(document).ready(function() {
                 }
             }
         }
-
-
-
-
-
     });
+
+    // Animations for leaving navigation buttons.
     $navButtons.mouseleave(function () {
 
-
-        var $text = $(this.firstChild);
+        this.style.zIndex = 5;
+        const $text = $(this);
         $text.active = false;
         clearInterval(timerArray[$text.text()]);
 
@@ -152,9 +172,10 @@ $(document).ready(function() {
         $(this).css('rotation', '');
     });
 
-
-    var $projects = $(".project-overview").each(function(i, obj) {
-        //test
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Animations for project class animations.
+    ///////////////////////////////////////////////////////////////////////////////////////
+    const $projects = $(".project-overview").each(function(i, obj) {
 
         $(obj).mouseover(function () {
 
@@ -173,11 +194,16 @@ $(document).ready(function() {
 
             $(this)
                 .velocity("stop")
-                .velocity({opacity:1.0, color: "white", boxShadowBlur: 0, scale: 1.0, color:"white", rotateZ: -0}, {duration: 500});
+                .velocity({opacity:1.0, boxShadowBlur: 0, scale: 1.0, color:"white", rotateZ: -0}, {duration: 500});
         });
 
     });
 
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Animation for old portfolio page.
+    ///////////////////////////////////////////////////////////////////////////////////////
+    /**
     var $circle = $(".timeline-circle");
 
     $circle.mouseover(function () {
@@ -195,13 +221,14 @@ $(document).ready(function() {
             .velocity("stop")
             .velocity({opacity:1.0}, {duration: 500});
     });
+    **/
 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Animation for logo.
+    ///////////////////////////////////////////////////////////////////////////////////////
+    const $logosection = $("#main-banner-logo").find("p");
 
-    var $nodes = $("#main-banner-logo p");
-
-    $nodes.mouseover(function () {
-
-        console.log("Yes");
+    $logosection.mouseover(function () {
 
         $(this)
             .velocity({color:"#0066ff"}, {duration: 500, queue:false});
@@ -209,20 +236,25 @@ $(document).ready(function() {
 
 
     });
-    $nodes.mouseleave(function () {
+    $logosection.mouseleave(function () {
 
         $(this)
             .velocity({color:"#FFFFFF"}, {duration: 500, queue:false});
     });
 
-    var $milestone = $("#timeline-bigcircle-one");
-
 });
 
-function GetRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+///////////////////////////////////////////////////////////////////////////////////////
+// Given a range, returns a random integer within range.
+///////////////////////////////////////////////////////////////////////////////////////
+function RandomInteger(minVal, maxVal) {
+    return Math.floor( Math.random() * ( maxVal - minVal + 1 ) ) + minVal;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+// Animation for old portfolio page.
+///////////////////////////////////////////////////////////////////////////////////////
+/**
 function milestoneOne() {
 
     $('#milestone-one div').css('visibility', "visible");
@@ -231,3 +263,4 @@ function milestoneOne() {
         .velocity({opacity: 1.0}, {duration: 500});
 
 }
+ **/
