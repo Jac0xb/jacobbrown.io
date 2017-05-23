@@ -23,6 +23,7 @@
 
     <!-- Loading VelocityJS Library -->
     <script src="includes/libraries/velocity.js" type="text/javascript"></script>
+    <script src="includes/javascript/drift.js" type="text/javascript"></script>
 
     <!-- Loading website animations -->
     <script src="assets/animations.js" type="text/javascript"></script>

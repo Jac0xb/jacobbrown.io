@@ -30,8 +30,10 @@ function create() {
     platforms = game.add.group();
     platforms.enableBody = true;
 
+    new generateWall(0, 0, 18, 1, game, platforms);
+
     // Create a player object.
-    player = game.add.sprite(32, game.world.height - 100, 'player');
+    player = game.add.sprite(25, game.world.height - 25, 'player');
     player.anchor.setTo(0.5, 0.5);
 
     // Create physics for player.
@@ -46,7 +48,6 @@ function create() {
 
     // Camera follow player.
     game.camera.follow(player);
-
 
     // Hook key board inputs to variables.
     cursors = game.input.keyboard.createCursorKeys();
@@ -110,11 +111,42 @@ function update() {
         jumpTimer = game.time.now + 750;
     }
 
+
+
+
 }
 
 function render() {
 
     game.debug.cameraInfo(game.camera, 32, 32);
     game.debug.spriteCoords(player, 32, 500);
+
+}
+
+function generateSector(sectorNum) {
+
+    sectorNum = sectorNum * 450;
+
+
+}
+
+class generateWall {
+
+    constructor(xPos, yPos, xScale, yScale, game, group) {
+
+        console.log("plaform created");
+
+        this.group = group;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.sprite = game.add.sprite(xPos,yPos, 'ground');
+
+        group.add(this.sprite);
+
+
+        this.sprite.scale.setTo(xScale,yScale);
+
+    }
+
 
 }

@@ -25,8 +25,8 @@ function funcAnimation() {
         }
     }
 
-    $wrapper.velocity("slideDown", {duration: 1000});
-    $wrapper.velocity( { scale: 1.25, translateY: 50, boxShadowBlur: 35 }, {duration:1000});
+    $wrapper.velocity("slideDown", {duration: 300});
+    $wrapper.velocity( { scale: 1.25, translateY: 50, boxShadowBlur: 35 }, {duration:300});
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Animation for project class elements.
@@ -242,6 +242,28 @@ $(document).ready(function() {
             .velocity({color:"#FFFFFF"}, {duration: 500, queue:false});
     });
 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Resume button
+    ///////////////////////////////////////////////////////////////////////////////////////
+    const $popup = $(".section-popup-button");
+
+    $popup.mouseover(function () {
+
+        var $paragraphElement = $(this).find("p");
+
+        $paragraphElement.velocity({wordSpacing: 15}, {duration: 500, queue:false});
+
+
+
+
+    });
+    $popup.mouseleave(function () {
+
+
+        var $paragraphElement = $(this).find("p");
+        $paragraphElement.velocity({wordSpacing: 1}, {duration: 500, queue:false});
+    });
+
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -264,3 +286,34 @@ function milestoneOne() {
 
 }
  **/
+
+var popupVisible = false;
+function createPDFPopup() {
+
+    console.log("Popup enabled");
+    // JQuery generating an image elements.
+    const $pdfPopup = $(
+        '<div class="popup"> <p><i>Click anywhere on the page to close.</i></p>' +
+        '<object data="assets/Brown,%20Jacob%20-%20Resume%20(5.22.2017).pdf" type="application/pdf" width="100%" height="100%">' +
+        '<p>Alternative text - include a link <a href="assets/Brown,%20Jacob%20-%20Resume%20(5.22.2017).pdf"">to the PDF!</a></p>' +
+        '</object>' +
+        '</div>');
+    $pdfPopup.prependTo($('#css-jacobbrown')[0]);
+
+    setTimeout(function () {popupVisible = true;}, 100);
+}
+
+
+$(document).click(function() {
+
+    if (popupVisible) {
+        var $popup = $(".popup");
+        $popup.remove();
+        popupVisible = false;
+    }
+
+});
+$(".popup").click(function(e) {
+    e.stopPropagation();
+    return false;
+});
