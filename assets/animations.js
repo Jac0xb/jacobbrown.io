@@ -2,28 +2,11 @@ var GLOBAL_currentpage = "";
 
 function funcAnimation() {
 
-    // Determining what page the user is looking at.
-    const queryDict = {};
-    location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]});
-
-    const pageID = queryDict["page"];
-
     ///////////////////////////////////////////////////////////////////////////////////////
     // Animation for main wrapper.
     ///////////////////////////////////////////////////////////////////////////////////////
 
     const $wrapper = $('#main-wrapper');
-    var offset = 1;
-
-    if (pageID !== "undefined") {
-
-        if (pageID === "bio")
-            offset = 50;
-        if (pageID === "portfolio")
-            offset = 10;
-        if (pageID === "main")
-            offset = 10;
-    }
 
     const $milestones = $('.milestones');
     $milestones.prependTo($wrapper[0]);
@@ -91,25 +74,13 @@ function funcAnimation() {
 
 }
 
-//
-//
-//
-$(document).ready(function() {
-
-    var $content = $("#main-content");
-
-    $content.load("includes/main.html", function() {
-
-        $("#page-main").velocity({opacity: 1.0}, {duration: 1000});
-    });
-});
-
 // Runs when document is loaded.
 $(document).ready(function() {
 
     //
     //
     //
+
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Navigation animations.
@@ -180,96 +151,30 @@ $(document).ready(function() {
     $("#main-nav-home").on("click", function() {
         event.preventDefault();
 
-        var $content = $("#main-content");
+        window.history.pushState({}, 'jacobrown.io - Home', '?home');
 
-        $content.load("includes/main.html",function() {
+        AnimationLoadHome();
 
-            $("#page-main").velocity({opacity: 1.0}, {duration: 1000});
-        });
     });
 
-    /// Porfolio Nav Button click event.
-    $("#main-nav-portfolio").on("click", function() {
-        event.preventDefault();
+        /// Porfolio Nav Button click event.
+        $("#main-nav-portfolio").on("click", function() {
+            event.preventDefault();
 
-        var $content = $("#main-content");
+            window.history.pushState({}, 'jacobrown.io - Portfolio', '?portfolio');
 
-        $content.load("includes/portfolio.html", function() {
-
-            $("#page-portfolio").velocity({opacity: 1.0}, {duration: 1000});
-
-            ///////////////////////////////////////////////////////////////////////////////////////
-            // Resume button
-            ///////////////////////////////////////////////////////////////////////////////////////
-            const $popup = $(".section-popup-button");
-
-            $popup.mouseover(function () {
-
-                var $paragraphElement = $(this).find("p");
-
-                $paragraphElement.velocity({wordSpacing: 15}, {duration: 500, queue:false});
-
-
-
-
-            });
-            $popup.mouseleave(function () {
-
-
-                var $paragraphElement = $(this).find("p");
-                $paragraphElement.velocity({wordSpacing: 1}, {duration: 500, queue:false});
-            });
+            AnimationLoadPortfolio();
 
         });
-    });
 
     /// Bio Nav Button click event.
     $("#main-nav-bio").on("click", function() {
         event.preventDefault();
 
-        var $content = $("#main-content");
+        window.history.pushState({}, 'jacobrown.io - Bio', '?bio');
 
-        $content.load("includes/bio.html", function() {
-            var $projectOverview = $(".project-overview");
+        AnimationLoadBio();
 
-            $projectOverview.each(function(i, obj) {
-
-                $(obj).velocity({opacity: 1.0}, {duration: 1000});
-
-            });
-
-            const $projectImages = $(".project-image");
-
-            $projectImages.velocity({opacity: 1.0}, {easing: [4]});
-
-            ///////////////////////////////////////////////////////////////////////////////////////
-            // Animations for project class animations.
-            ///////////////////////////////////////////////////////////////////////////////////////
-            const $projects = $projectOverview.each(function(i, obj) {
-
-                $(obj).mouseover(function () {
-
-                    this.style.zIndex = 10;
-
-                    $(this)
-                        .velocity("stop")
-                        .velocity({opacity:1.0, scale: 1.5, boxShadowBlur: 35, rotateZ: -0},625, [500, 20], {queue: false, duration: 500});
-
-
-
-                });
-                $(obj).mouseleave(function () {
-
-                    this.style.zIndex = 1;
-
-                    $(this)
-                        .velocity("stop")
-                        .velocity({opacity:1.0, boxShadowBlur: 0, scale: 1.0, color:"white", rotateZ: -0}, {duration: 500});
-                });
-
-            });
-
-        });
 
     });
 
@@ -365,7 +270,116 @@ $(document).click(function() {
     }
 
 });
+
 $(".popup").click(function(e) {
     e.stopPropagation();
     return false;
 });
+
+//
+//
+//
+$("#main-content").ready(function() {
+
+    var directoryString = location.search.split('/');
+
+    if(directoryString.length > 0) {
+
+        var explodedParameterString = directoryString[0].replace('?','');
+
+        console.log(explodedParameterString);
+
+        if (explodedParameterString.toLowerCase() === "home")
+            AnimationLoadHome();
+        else if (explodedParameterString.toLowerCase() === "portfolio")
+            AnimationLoadPortfolio();
+        else if (explodedParameterString.toLowerCase() === "bio")
+            AnimationLoadBio();
+        else
+            AnimationLoadHome();
+
+    }
+});
+
+function AnimationLoadHome() {
+
+    var $content = $("#main-content");
+
+    $content.load("includes/main.html",function() {
+
+        $("#page-main").velocity({opacity: 1.0}, {duration: 1000});
+    });
+
+}
+
+function AnimationLoadPortfolio () {
+
+    var $content = $("#main-content");
+    $content.load("includes/portfolio.html", function() {
+
+        $("#page-portfolio").velocity({opacity: 1.0}, {duration: 1000});
+
+        const $popup = $(".section-popup-button");
+
+        $popup.mouseover(function () {
+
+            var $paragraphElement = $(this).find("p");
+            $paragraphElement.velocity({wordSpacing: 15}, {duration: 500, queue:false});
+
+        });
+        $popup.mouseleave(function () {
+
+            var $paragraphElement = $(this).find("p");
+            $paragraphElement.velocity({wordSpacing: 1}, {duration: 500, queue:false});
+
+        });
+
+    });
+
+}
+
+function AnimationLoadBio() {
+
+    var $content = $("#main-content");
+    $content.load("includes/bio.html", function() {
+        var $projectOverview = $(".project-overview");
+
+        $projectOverview.each(function(i, obj) {
+
+            $(obj).velocity({opacity: 1.0}, {duration: 1000});
+
+        });
+
+        const $projectImages = $(".project-image");
+
+        $projectImages.velocity({opacity: 1.0}, {easing: [4]});
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // Animations for project class animations.
+        ///////////////////////////////////////////////////////////////////////////////////////
+        const $projects = $projectOverview.each(function(i, obj) {
+
+            $(obj).mouseover(function () {
+
+                this.style.zIndex = 10;
+
+                $(this)
+                    .velocity("stop")
+                    .velocity({opacity:1.0, scale: 1.5, boxShadowBlur: 35, rotateZ: -0},625, [500, 20], {queue: false, duration: 500});
+
+
+
+            });
+            $(obj).mouseleave(function () {
+
+                this.style.zIndex = 1;
+
+                $(this)
+                    .velocity("stop")
+                    .velocity({opacity:1.0, boxShadowBlur: 0, scale: 1.0, color:"white", rotateZ: -0}, {duration: 500});
+            });
+
+        });
+
+    });
+}

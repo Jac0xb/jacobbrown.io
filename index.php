@@ -59,6 +59,7 @@ allows a JS function to be ran when element is fully loaded. -->
     <!-- The stuff inbetween the header and the footer -->
     <div id="main-content">
 
+
     </div>
 
     <?php include("includes/footer.php"); ?>
