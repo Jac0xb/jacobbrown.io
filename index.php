@@ -28,14 +28,6 @@
     <!-- Loading website animations -->
     <script src="assets/animations.js" type="text/javascript"></script>
 
-    <script>
-
-        $(document).ready( function() {
-            $("#main-content").load("includes/main.php");
-        });
-
-    </script>
-
     <!-- Charset of webpage -->
     <meta charset="utf-8">
     <!-- Homepage of webpage -->

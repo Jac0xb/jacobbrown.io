@@ -98,12 +98,10 @@ $(document).ready(function() {
 
     var $content = $("#main-content");
 
-    $content.load("includes/main.php");
-
-    setTimeout(function () {
+    $content.load("includes/main.html", function() {
 
         $("#page-main").velocity({opacity: 1.0}, {duration: 1000});
-    }, 100);
+    });
 });
 
 // Runs when document is loaded.
@@ -184,12 +182,10 @@ $(document).ready(function() {
 
         var $content = $("#main-content");
 
-        $content.load("includes/main.php");
-
-        setTimeout(function() {
+        $content.load("includes/main.html",function() {
 
             $("#page-main").velocity({opacity: 1.0}, {duration: 1000});
-        }, 100);
+        });
     });
 
     /// Porfolio Nav Button click event.
@@ -198,9 +194,7 @@ $(document).ready(function() {
 
         var $content = $("#main-content");
 
-        $content.load("includes/portfolio.php");
-
-        setTimeout(function() {
+        $content.load("includes/portfolio.html", function() {
 
             $("#page-portfolio").velocity({opacity: 1.0}, {duration: 1000});
 
@@ -226,7 +220,7 @@ $(document).ready(function() {
                 $paragraphElement.velocity({wordSpacing: 1}, {duration: 500, queue:false});
             });
 
-        }, 100);
+        });
     });
 
     /// Bio Nav Button click event.
@@ -235,10 +229,7 @@ $(document).ready(function() {
 
         var $content = $("#main-content");
 
-        $content.load("includes/bio.php");
-
-        setTimeout(function() {
-
+        $content.load("includes/bio.html", function() {
             var $projectOverview = $(".project-overview");
 
             $projectOverview.each(function(i, obj) {
@@ -278,7 +269,7 @@ $(document).ready(function() {
 
             });
 
-        },50);
+        });
 
     });
 
