@@ -23,11 +23,18 @@
 
     <!-- Loading VelocityJS Library -->
     <script src="includes/libraries/velocity.js" type="text/javascript"></script>
-    <script src="includes/javascript/drift.js" type="text/javascript"></script>
+    <!--<script src="includes/javascript/drift.js" type="text/javascript"></script>-->
 
     <!-- Loading website animations -->
     <script src="assets/animations.js" type="text/javascript"></script>
 
+    <script>
+
+        $(document).ready( function() {
+            $("#main-content").load("includes/main.php");
+        });
+
+    </script>
 
     <!-- Charset of webpage -->
     <meta charset="utf-8">
@@ -59,23 +66,6 @@ allows a JS function to be ran when element is fully loaded. -->
 
     <!-- The stuff inbetween the header and the footer -->
     <div id="main-content">
-
-        <!-- Takes the "page" parameters of the URL, IE: "page=example.php"
-        and loads the contents of the php file into the webpage. -->
-        <?php
-
-        $page = isset($_GET['page']) ? $_GET['page'] : "main";
-
-        $page = filter_var($page, FILTER_SANITIZE_STRING);
-
-        if( file_exists("includes/" . $page . ".php")) {
-            include("includes/" . $page . ".php");
-        }
-        else {
-            include("includes/404.php");
-        }
-
-        ?>
 
     </div>
 

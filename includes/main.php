@@ -1,4 +1,4 @@
-<div class="whitetext">
+<div class="whitetext" id="page-main" style="opacity: 0;">
 
     <p>
         Under Contruction!

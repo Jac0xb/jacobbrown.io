@@ -1,3 +1,4 @@
+var GLOBAL_currentpage = "";
 
 function funcAnimation() {
 
@@ -12,35 +13,21 @@ function funcAnimation() {
     ///////////////////////////////////////////////////////////////////////////////////////
 
     const $wrapper = $('#main-wrapper');
+    var offset = 1;
 
     if (pageID !== "undefined") {
 
         if (pageID === "bio")
-            $wrapper.css('margin', "170px auto auto auto");
-        if (pageID === "portfolio") {
-            $wrapper.css('margin', "205px auto auto auto");
-
-            const $milestones = $('.milestones');
-            $milestones.prependTo($wrapper[0]);
-        }
+            offset = 50;
+        if (pageID === "portfolio")
+            offset = 10;
+        if (pageID === "main")
+            offset = 10;
     }
 
-    $wrapper.velocity("slideDown", {duration: 300});
-    $wrapper.velocity( { scale: 1.25, translateY: 50, boxShadowBlur: 35 }, {duration:300});
-
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // Animation for project class elements.
-    ///////////////////////////////////////////////////////////////////////////////////////
-
-    $(".project-overview").each(function(i, obj) {
-
-        $(obj).velocity({opacity: 1.0}, {delay: 1000, duration: 1000});
-
-    });
-
-    const $projectImages = $(".project-image");
-
-    $projectImages.velocity({opacity: 1.0}, {delay:1250, easing: [4]});
+    const $milestones = $('.milestones');
+    $milestones.prependTo($wrapper[0]);
+    $wrapper.velocity( { boxShadowBlur: 35 }, {duration:1000});
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Animation for 'jacobbrown.io' logo.
@@ -104,8 +91,27 @@ function funcAnimation() {
 
 }
 
+//
+//
+//
+$(document).ready(function() {
+
+    var $content = $("#main-content");
+
+    $content.load("includes/main.php");
+
+    setTimeout(function () {
+
+        $("#page-main").velocity({opacity: 1.0}, {duration: 1000});
+    }, 100);
+});
+
 // Runs when document is loaded.
 $(document).ready(function() {
+
+    //
+    //
+    //
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Navigation animations.
@@ -172,30 +178,107 @@ $(document).ready(function() {
         $(this).css('rotation', '');
     });
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // Animations for project class animations.
-    ///////////////////////////////////////////////////////////////////////////////////////
-    const $projects = $(".project-overview").each(function(i, obj) {
+    /// Home Nav Button click event.
+    $("#main-nav-home").on("click", function() {
+        event.preventDefault();
 
-        $(obj).mouseover(function () {
+        var $content = $("#main-content");
 
-            this.style.zIndex = 10;
+        $content.load("includes/main.php");
 
-            $(this)
-                .velocity("stop")
-                .velocity({opacity:1.0, scale: 1.5, boxShadowBlur: 35, rotateZ: -0},625, [500, 20], {queue: false, duration: 500});
+        setTimeout(function() {
+
+            $("#page-main").velocity({opacity: 1.0}, {duration: 1000});
+        }, 100);
+    });
+
+    /// Porfolio Nav Button click event.
+    $("#main-nav-portfolio").on("click", function() {
+        event.preventDefault();
+
+        var $content = $("#main-content");
+
+        $content.load("includes/portfolio.php");
+
+        setTimeout(function() {
+
+            $("#page-portfolio").velocity({opacity: 1.0}, {duration: 1000});
+
+            ///////////////////////////////////////////////////////////////////////////////////////
+            // Resume button
+            ///////////////////////////////////////////////////////////////////////////////////////
+            const $popup = $(".section-popup-button");
+
+            $popup.mouseover(function () {
+
+                var $paragraphElement = $(this).find("p");
+
+                $paragraphElement.velocity({wordSpacing: 15}, {duration: 500, queue:false});
 
 
 
-        });
-        $(obj).mouseleave(function () {
 
-            this.style.zIndex = 1;
+            });
+            $popup.mouseleave(function () {
 
-            $(this)
-                .velocity("stop")
-                .velocity({opacity:1.0, boxShadowBlur: 0, scale: 1.0, color:"white", rotateZ: -0}, {duration: 500});
-        });
+
+                var $paragraphElement = $(this).find("p");
+                $paragraphElement.velocity({wordSpacing: 1}, {duration: 500, queue:false});
+            });
+
+        }, 100);
+    });
+
+    /// Bio Nav Button click event.
+    $("#main-nav-bio").on("click", function() {
+        event.preventDefault();
+
+        var $content = $("#main-content");
+
+        $content.load("includes/bio.php");
+
+        setTimeout(function() {
+
+            var $projectOverview = $(".project-overview");
+
+            $projectOverview.each(function(i, obj) {
+
+                $(obj).velocity({opacity: 1.0}, {duration: 1000});
+
+            });
+
+            const $projectImages = $(".project-image");
+
+            $projectImages.velocity({opacity: 1.0}, {easing: [4]});
+
+            ///////////////////////////////////////////////////////////////////////////////////////
+            // Animations for project class animations.
+            ///////////////////////////////////////////////////////////////////////////////////////
+            const $projects = $projectOverview.each(function(i, obj) {
+
+                $(obj).mouseover(function () {
+
+                    this.style.zIndex = 10;
+
+                    $(this)
+                        .velocity("stop")
+                        .velocity({opacity:1.0, scale: 1.5, boxShadowBlur: 35, rotateZ: -0},625, [500, 20], {queue: false, duration: 500});
+
+
+
+                });
+                $(obj).mouseleave(function () {
+
+                    this.style.zIndex = 1;
+
+                    $(this)
+                        .velocity("stop")
+                        .velocity({opacity:1.0, boxShadowBlur: 0, scale: 1.0, color:"white", rotateZ: -0}, {duration: 500});
+                });
+
+            });
+
+        },50);
 
     });
 
@@ -240,28 +323,6 @@ $(document).ready(function() {
 
         $(this)
             .velocity({color:"#FFFFFF"}, {duration: 500, queue:false});
-    });
-
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // Resume button
-    ///////////////////////////////////////////////////////////////////////////////////////
-    const $popup = $(".section-popup-button");
-
-    $popup.mouseover(function () {
-
-        var $paragraphElement = $(this).find("p");
-
-        $paragraphElement.velocity({wordSpacing: 15}, {duration: 500, queue:false});
-
-
-
-
-    });
-    $popup.mouseleave(function () {
-
-
-        var $paragraphElement = $(this).find("p");
-        $paragraphElement.velocity({wordSpacing: 1}, {duration: 500, queue:false});
     });
 
 });

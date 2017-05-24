@@ -48,7 +48,7 @@
 #main-nav-superior li {
     float: left;
     width:100px;
-    padding:auto;
+    padding: auto;
     flex-grow: 100;
     flex-basis: 0;
     z-index: 5;
@@ -64,6 +64,7 @@
 
 }
 
+
 #main-wrapper {
 
     background-color: #000000;
@@ -71,6 +72,8 @@
     width: 450px;
     height: auto;
     z-index: 10;
+    zoom: 1.5;
+    -moz-transform: scale(1.5);
 
 }
 
@@ -98,10 +101,12 @@
 
 }
 
-#main-banner a
+#main-banner a,p
 {
     display: inline-flex;
     text-decoration: none;
+    padding: auto;
+    color: white;
 
 }
 

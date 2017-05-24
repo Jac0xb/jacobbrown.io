@@ -6,7 +6,7 @@
         </div>
         <div class="project-summary">
             Hello, my name is <b style="color:#0066ff;">Jacob Brown</b>!<br>
-            A native Utahn, I grew up building computers and software as a childhood hobby.
+            A Utah native, I grew up building computers and software as a childhood hobby.
         </div>
     </div>
 

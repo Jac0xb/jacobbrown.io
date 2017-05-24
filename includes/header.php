@@ -11,15 +11,15 @@
 <nav id="main-nav">
 
     <ul id="main-nav-superior">
-        <li><a id="main-nav-home" href="index.php?page=main">home</a></li>
-        <li><a id="main-nav-bio" href="index.php?page=bio">bio</a></li>
-        <li><a id="main-nav-portfolio" href="index.php?page=portfolio">portfolio</a></li>
-        <li><a id="main-nav-contact" href="index.php?contact">contact</a></li>
+        <li><p href="javascript: void(0)" id="main-nav-home">home</></li>
+        <li><p href="javascript: void(0)" id="main-nav-bio">bio</p></li>
+        <li><p href="javascript: void(0)" id="main-nav-portfolio">portfolio</p></li>
+        <li><p href="javascript: void(0)" id="main-nav-contact">contact</p></li>
     </ul>
     <ul id="main-nav-inferior">
-        <li><a style="font-size:14px" id="main-nav-game" href="index.php?page=game">active<br>gamedev</a></li>
-        <li><a style="font-size:14px" id="main-nav-credits" href="index.php?page=credits"><strike>contributions</strike></a></li>
-        <li><a style="font-size:14px" id="main-nav-etc" href="index.php?page=etc"><strike>etc. etc.</strike></a></li>
+        <li><a href="javascript: void(0)" style="font-size:14px" id="main-nav-game">active<br>gamedev</a></li>
+        <li><a href="javascript: void(0)"  style="font-size:14px" id="main-nav-credits"><strike>contributions</strike></a></li>
+        <li><a href="javascript: void(0)" style="font-size:14px" id="main-nav-etc"><strike>etc. etc.</strike></a></li>
     </ul>
 
 </nav>
