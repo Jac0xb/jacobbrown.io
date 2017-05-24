@@ -93,7 +93,7 @@ $(document).ready(function() {
     $navButtons.mouseover(function () {
 
         this.style.zIndex = 0;
-        const $text = $(this);
+        const $text = $(this).find("p");
         $text.active = true;
 
         const randomInt = RandomInteger(0,1000);
@@ -136,7 +136,7 @@ $(document).ready(function() {
     $navButtons.mouseleave(function () {
 
         this.style.zIndex = 5;
-        const $text = $(this);
+        const $text = $(this).find("p");
         $text.active = false;
         clearInterval(timerArray[$text.text()]);
 
