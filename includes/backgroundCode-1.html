@@ -1,0 +1,76 @@
+using System;{end}
+using System.Collections.Generic;{end}
+using System.Data.SqlClient;{end}
+using System.IO;{end}
+using System.Linq;{end}
+using System.Net;{end}
+using System.Text.RegularExpressions;{end}
+using static System.Int32;{end}
+using static Boggle.Data;{end}
+using static System.Net.HttpStatusCode;{end}
+{end}
+namespace Boggle {{end}
+{end}
+^///{end}
+^/// The Boggle WCF service which houses the functionality of the Boggle server.{end}
+^///{end}
+^public class BoggleService{end}
+^{{end}
+^{end}
+^// The current pending match. (-1 means no pending matches){end}
+^private static int PendingGameID = -1;{end}
+^{end}
+^// An asynchronous lock object for dictionary access.{end}
+^private static readonly object Sync = new object();{end}
+^{end}
+^///{end}
+^/// Returns null if incoming object(s) is/are null.{end}
+^///{end}
+^public static bool EqualsNull(params object[] x) { return x.Any(y =&gt y == null); }{end}
+^{end}
+^///{end}
+^/// Returns true if string has length of 0;{end}
+^///{end}
+^public static bool IsEmpty(params string[] x) { return x.Any(y =&gt y.Length &lt= 0); }{end}
+^{end}
+^///{end}
+^/// Returns true if, the inequality x &lt; y &lt; z for Func( x, y, z) holds.{end}
+^///{end}
+^public static readonly Func&ltint, int, int, bool&gt WithinRange = (x, y, z) =&gt x &lt y && y &lt z;{end}
+^{end}
+^///{end}
+^/// Sets HTTP header status as Forbidden.{end}
+^///{end}
+^//private static readonly Action Forbid = () =&gt SetStatus(Forbidden);{end}
+^{end}
+^///{end}
+^/// Cleans up a given mysql connection.{end}
+^///{end}
+^private static readonly Action&ltSqlConnection&gt Cleanup = x =&gt{end}
+^{{end}
+^if (EqualsNull(x)) return;{end}
+^x.Close();{end}
+^x.Dispose();{end}
+^;{end}
+^{end}
+^///{end}
+^/// Creates a key-value pair between a string and an object.{end}
+^///{end}
+^private static readonly Func&ltstring, object, KeyValuePair&ltstring, object&gt&gt createPair ={end}
+^(x, y) =&gt new KeyValuePair&ltstring, object&gt(x, y);{end}
+^{end}
+^// The allowed times for games on this server.{end}
+^private const int MinTime = 5;{end}
+^private const int MaxTime = 120;{end}
+^{end}
+^// A lookup table using word length to determine the score the word will receive.{end}
+^private static readonly Dictionary&ltint, int&gt ScoreLookup = new Dictionary&ltint, int&gt{end}
+^{{end}
+^{3, 1},{end}
+^{4, 1},{end}
+^{5, 2},{end}
+^{6, 3},{end}
+^{7, 5},{end}
+^{8, 11}{end}
+^};{end}
+}

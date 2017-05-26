@@ -1,118 +1,203 @@
-var GLOBAL_currentpage = "";
+let GLOBAL_FloaterInterval = 2500;
+let GLOBAL_ResumeURL = "assets/Brown,%20Jacob%20-%20Resume%20(5.24.2017).pdf";
+let GLOBAL_TypingSpeeds = [50,500];
+let GLOBAL_TypingEnabled = true;
+let GLOBAL_PopupVisible = false;
 
+
+/**
+ *  Loads animations on loading of body of HTML.
+ */
 function funcAnimation() {
 
-    ///////////////////////////////////////////////////////////////////////////////////////
     // Animation for main wrapper.
-    ///////////////////////////////////////////////////////////////////////////////////////
-
     const $wrapper = $('#main-wrapper');
-
     const $milestones = $('.milestones');
     $milestones.prependTo($wrapper[0]);
     $wrapper.velocity( { boxShadowBlur: 35 }, {duration:1000});
 
-    ///////////////////////////////////////////////////////////////////////////////////////
     // Animation for 'jacobbrown.io' logo.
-    ///////////////////////////////////////////////////////////////////////////////////////
-
     const $title = $("#main-banner-logo").find( "p" );
     $title.velocity({translateY: 20}, {loop:true, duration:7500, delay:2000});
     $title.velocity({translateY: -20}, {loop:true, duration:7500});
 
-    ///////////////////////////////////////////////////////////////////////////////////////
     // Cave at the bottom of the website animation.
-    ///////////////////////////////////////////////////////////////////////////////////////
-
     const $cave = $(".cls-1");
     $cave.velocity({fill: "#FFFFFF"}, {loop:true, duration:7500,delay:10000})
     .velocity({fill: "#000000"}, {loop:true, duration:7500,delay:10000});
 
-
     // Timer for createFloaters every 2.5 seconds.
-    setInterval(createFloaters, 2500);
+    setInterval(createFloaters, GLOBAL_FloaterInterval);
 
-    // Creates floaters that traverse the whole of the webpage.
-    function createFloaters() {
+}
 
-        const randomImage = [
-            "assets/images/silk_icons/application.png",
-            "assets/images/silk_icons/application_edit.png",
-            "assets/images/silk_icons/application_xp_terminal.png",
-            "assets/images/silk_icons/bug_link.png",
-            "assets/images/silk_icons/database_table.png",
-            "assets/images/silk_icons/medal_gold_1.png",
-            "assets/images/silk_icons/ruby.png",
-            "assets/images/silk_icons/server_add.png",
-            "assets/images/silk_icons/star.png",
-            "assets/images/silk_icons/television.png",
-            "assets/images/silk_icons/user_red.png",
-            "assets/images/silk_icons/wrench.png"];
+/**
+ *  Creates floaters that traverse the banner of the webpage.
+ */
+function createFloaters() {
 
-        // JQuery generating an image elements.
-        const $floater = $('<img class="floaters" style="position:absolute; zoom: .8; -moz-transform: scale(0.8); z-index: 100;  left:-20px; top:100px;" src="assets/images/silk_icons/star.png">');
-        $floater.attr('src', randomImage[RandomInteger(0, randomImage.length - 1)]);
-        $floater.appendTo($('#main-banner')[0]);
+    //
+    const randomImage = [
+        "assets/images/silk_icons/accept.png",
+        "assets/images/silk_icons/script_code.png",
+        "assets/images/silk_icons/server.png",
+        "assets/images/silk_icons/world.png",
+        "assets/images/silk_icons/email_link.png",
+        "assets/images/silk_icons/application.png",
+        "assets/images/silk_icons/application_edit.png",
+        "assets/images/silk_icons/application_xp_terminal.png",
+        "assets/images/silk_icons/bug_link.png",
+        "assets/images/silk_icons/database_table.png",
+        "assets/images/silk_icons/medal_gold_1.png",
+        "assets/images/silk_icons/ruby.png",
+        "assets/images/silk_icons/server_add.png",
+        "assets/images/silk_icons/star.png",
+        "assets/images/silk_icons/television.png",
+        "assets/images/silk_icons/user_red.png",
+        "assets/images/silk_icons/wrench.png"];
 
-        // Animations for floater.
-        $floater.velocity({left: '102%'}, {duration: 20000, complete: function() {$floater.remove()}});
+    const floaterElement = "<img class='floaters' style='position:absolute; zoom: .8; -moz-transform: scale(0.8); z-index: 100;  left:-20px; top:100px;' src='assets/images/silk_icons/star.png'>";
 
-        upAnimation();
+    // JQuery generating an image elements.
+    const $floater = $(floaterElement);
+    $floater.attr('src', randomImage[RandomInteger(0, randomImage.length - 1)]);
+    $floater.appendTo($('#main-banner')[0]);
 
-        function upAnimation() {
+    // Animations for floater.
+    $floater.velocity({left: '102%'}, {duration: 20000, complete: function() {$floater.remove()}});
 
-            $floater.velocity({top: "90%"}, {queue: false, duration: 2000, complete: downAnimation});
+    upAnimation();
 
-        }
+    function upAnimation() {
 
-        function downAnimation() {
+        $floater.velocity({top: "90%"}, {queue: false, duration: 2000, complete: downAnimation});
 
-            $floater.velocity({top: "70%"}, {queue: false, duration: 2000, complete: upAnimation});
+    }
 
-        }
+    function downAnimation() {
+
+        $floater.velocity({top: "70%"}, {queue: false, duration: 2000, complete: upAnimation});
 
     }
 
 }
 
-
-
-
-// Runs when document is loaded.
+// Runs when HTML document is loaded.
+// Initializes the hooks/automated animations for the webpage.
 $(document).ready(function() {
 
-    //
-    //
-    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Background coding animation load up.
+    ///////////////////////////////////////////////////////////////////////////////////////
+    $("#background-code").load("includes/backgroundCode-" + RandomInteger(1,2) + ".html", function() {
 
+        // Declaring
+        let $code = $("#background-code");
+        let modifiedHTML = "";
+        let absIndex = 0;
+        let newlineArrays = {};
+
+        let span = '<span style="display:inline-block; width: 25px;"></span>';
+        $code.html().split('{end}').forEach(function(currLine, index) {
+
+            newlineArrays[index] = absIndex;
+
+            currLine.split('').forEach(function(currChar) {
+
+                // '^' Tab character replacement.
+                if (currChar === '^')
+                    currChar = span;
+
+                absIndex++;
+                modifiedHTML = modifiedHTML + '<span style="color:#F0F0F0; background-color:#F0F0F0;" id="background-code-node-' + absIndex + '\">' + currChar + '</span>';
+
+            });
+
+            modifiedHTML = modifiedHTML + "<br>";
+
+        });
+
+        $code.html(modifiedHTML);
+
+        // Code line manipulation.
+        let $codeLines = $("#background-code-line");
+        for(let line in newlineArrays) {
+            $codeLines.html($codeLines.html() + '<span id=\"background-code-line-' + line + '\" style="opacity: 0">' + ( parseInt(line) + 1) + "</span>" + "<br>");
+        }
+
+        // Variables for the typing animations.
+        let currNode = 0;
+        let line = 0;
+        let currNextLine = -1;
+        $("#background-code-line-0").velocity({opacity:1.0}, {queue: false, duration: 100});
+
+        if (GLOBAL_TypingEnabled)
+        setTimeout(typeAnimation, 200);
+
+        // Simulates the typing of code in the background.
+        function typeAnimation() {
+
+            if (currNextLine < 0) {
+                currNextLine = newlineArrays[line++];
+            }
+
+            if (currNode >= currNextLine) {
+
+                let $currLine = $("#background-code-line-" + line);
+                $currLine.velocity({opacity:1.0}, {queue: false, duration: 100});
+                currNextLine = -1;
+
+            }
+
+            // Animation of the code.
+            let $currNode = $("#background-code-node-" + currNode);
+            $currNode.velocity({color:"#000"}, {queue: false, duration: 100});
+            $currNode.velocity({backgroundColor:["#F0F0F0","#000"]}, {queue: false, duration: 300});
+
+            currNode++;
+
+            if (GLOBAL_TypingEnabled)
+            setTimeout(typeAnimation, RandomInteger(GLOBAL_TypingSpeeds[0],GLOBAL_TypingSpeeds[1]));
+
+        }
+
+    });
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Navigation animations.
     ///////////////////////////////////////////////////////////////////////////////////////
-
     const timerArray = {};
     const $navButtons = $("#main-nav").find("li");
 
-    // Mouse over hook for navigation buttons.
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Mouse event hook for navigation buttons.
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    // Mouse over/enter navigation elements.
     $navButtons.mouseover(function () {
 
+        // Styling changes, defaults.
         this.style.zIndex = 0;
+
+        // Getting the paragraph inside the navigation list element.
         const $text = $(this).find("p");
         $text.active = true;
-
         const randomInt = RandomInteger(0,1000);
 
-        if (randomInt <= 950 ) {
+        // Normal animation.
+        if (randomInt <= 900 ) {
             $text
                 .velocity("stop")
                 .velocity({scale: 2.0}, {queue: false, duration: 500});
         }
-        else if (randomInt > 950 && randomInt <= 975) {
+        // Rotation animation.
+        else if (randomInt > 900 && randomInt <= 950) {
             $text
                 .velocity("stop")
                 .velocity({scale: 2.0, rotateZ:360}, {queue: false, duration: 500});
         }
-        else if (randomInt > 975 && randomInt <= 1000) {
+        // Color changing animation.
+        else if (randomInt > 950 && randomInt <= 1000) {
 
             const ranColors = ['#0000ff', '#00ff00', '#ff0000'];
 
@@ -128,15 +213,11 @@ $(document).ready(function() {
                     const color = ranColors[RandomInteger(0, 2)];
                     $text.velocity({scale: 2.0, color: color, rotateZ: -0}, {duration: 100});
                 }
-                else {
-                    clearInterval(timerArray[$text.text()]);
-                    $text.velocity($text.timerColor);
-                }
             }
         }
     });
 
-    // Animations for leaving navigation buttons.
+    // Mouse leave navigation elements.
     $navButtons.mouseleave(function () {
 
         this.style.zIndex = 5;
@@ -151,47 +232,47 @@ $(document).ready(function() {
         $(this).css('rotation', '');
     });
 
-    /// Home Nav Button click event.
+    /// onClick event for home button.
     $("#main-nav-home").on("click", function() {
+
         event.preventDefault();
 
         window.history.pushState({}, 'jacobrown.io - Home', '?home');
-
         AnimationLoadHome();
 
     });
 
-    /// Game Nav Button click event.
+    /// onClick event for game button.
     $("#main-nav-game").on("click", function() {
+
         event.preventDefault();
 
         window.history.pushState({}, 'jacobrown.io - Game', '?game');
-
         AnimationLoadGame();
 
     });
 
-        /// Porfolio Nav Button click event.
-        $("#main-nav-portfolio").on("click", function() {
-            event.preventDefault();
+    /// onClick event for portfolio button.
+    $("#main-nav-portfolio").on("click", function() {
 
-            window.history.pushState({}, 'jacobrown.io - Portfolio', '?portfolio');
-
-            AnimationLoadPortfolio();
-
-        });
-
-    /// Bio Nav Button click event.
-    $("#main-nav-bio").on("click", function() {
         event.preventDefault();
 
-        window.history.pushState({}, 'jacobrown.io - Bio', '?bio');
-
-        AnimationLoadBio();
-
+        window.history.pushState({}, 'jacobrown.io - Portfolio', '?portfolio');
+        AnimationLoadPortfolio();
 
     });
 
+    /// onClick event for bio button.
+    $("#main-nav-bio").on("click", function() {
+
+        event.preventDefault();
+
+        window.history.pushState({}, 'jacobrown.io - Bio', '?bio');
+        AnimationLoadBio();
+
+    });
+
+    // Old portfolio code.
     ///////////////////////////////////////////////////////////////////////////////////////
     // Animation for old portfolio page.
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -214,40 +295,11 @@ $(document).ready(function() {
             .velocity({opacity:1.0}, {duration: 500});
     });
     **/
-
     ///////////////////////////////////////////////////////////////////////////////////////
-    // Animation for logo.
-    ///////////////////////////////////////////////////////////////////////////////////////
-    const $logosection = $("#main-banner-logo").find("p");
-
-    $logosection.mouseover(function () {
-
-        $(this)
-            .velocity({color:"#0066ff"}, {duration: 500, queue:false});
-
-
-
-    });
-    $logosection.mouseleave(function () {
-
-        $(this)
-            .velocity({color:"#FFFFFF"}, {duration: 500, queue:false});
-    });
-
-});
-
-///////////////////////////////////////////////////////////////////////////////////////
-// Given a range, returns a random integer within range.
-///////////////////////////////////////////////////////////////////////////////////////
-function RandomInteger(minVal, maxVal) {
-    return Math.floor( Math.random() * ( maxVal - minVal + 1 ) ) + minVal;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
 // Animation for old portfolio page.
 ///////////////////////////////////////////////////////////////////////////////////////
-/**
-function milestoneOne() {
+    /**
+     function milestoneOne() {
 
     $('#milestone-one div').css('visibility', "visible");
 
@@ -255,143 +307,113 @@ function milestoneOne() {
         .velocity({opacity: 1.0}, {duration: 500});
 
 }
- **/
+     **/
 
-$("#background-code").ready(function() {
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Animation for banner logo.
+    ///////////////////////////////////////////////////////////////////////////////////////
 
-    var $code = $("#background-code");
-    var modifiedHTML = "";
-    var absIndex = 0;
-    var newlineArrays = {};
+    const $logoSection = $("#main-banner-logo").find("p");
 
-    var span = '<span style=\"display:inline-block; width: 25px;\"></span>';
-
-    $code.html().split('{end}').forEach(function(currLine, index, array) {
-
-        newlineArrays[index] = absIndex;
-
-        currLine.split('').forEach(function(currChar, index, array) {
-
-            if (currChar === '^')
-                currChar = span;
-
-            absIndex++;
-            modifiedHTML = modifiedHTML + '<span style="color:#F0F0F0; background-color:#F0F0F0;" id="background-code-node-' + absIndex + '\">' + currChar + '</span>';
-
-        });
-
-        modifiedHTML = modifiedHTML + "<br>";
-
+    $logoSection.mouseover(function () {
+        $(this).velocity({color:"#0066ff"}, {duration: 500, queue:false});
     });
 
-    $code.html(modifiedHTML);
-
-    var $codeLines = $("#background-code-line");
-
-    for (var line in newlineArrays) {
-        $codeLines.html($codeLines.html() + ( parseInt(line) + 1) + "<br>");
-    }
-
-    var floor = 1;
-    var elevator = 0;
-    var lengthOfSequence = -1;
-
-    var interval = setInterval(function() {
-
-        if (floor === absIndex)
-            clearInterval(this);
-
-        var $currNode = $("#background-code-node-" + floor);
-        $currNode.velocity({color:"#000"}, {queue: false, duration: 100});
-        $currNode.velocity({backgroundColor:["#F0F0F0","#000"]}, {queue: false, duration: 300});
-
-        floor++;
-
-    },200);
+    $logoSection.mouseleave(function () {
+        $(this).velocity({color:"#FFFFFF"}, {duration: 500, queue:false});
+    });
 
 });
 
-//
-//
-//
-function backgroundCodeAnimation() {
 
-    console.log("Load background");
-
+/**
+ * Given a range, returns a random integer within range.
+ * @param minVal
+ * @param maxVal
+ * @returns {*}
+ * @constructor
+ */
+function RandomInteger(minVal, maxVal) {
+    return Math.floor( Math.random() * ( maxVal - minVal + 1 ) ) + minVal;
 }
 
-
-var popupVisible = false;
+/**
+ * Creates a popup page of the resume PDF.
+ */
 function createPDFPopup() {
 
     console.log("Popup enabled");
     // JQuery generating an image elements.
     const $pdfPopup = $(
         '<div class="popup"> <p><i>Click anywhere on the page to close.</i></p>' +
-        '<object data="assets/Brown,%20Jacob%20-%20Resume%20(5.24.2017).pdf" type="application/pdf" width="100%" height="100%">' +
-        '<p>Alternative text - include a link <a href="assets/Brown,%20Jacob%20-%20Resume%20(5.22.2017).pdf"">to the PDF!</a></p>' +
+        '<object data=\"' + GLOBAL_ResumeURL + '\" type="application/pdf" width="100%" height="100%">' +
+        '<p><a href=\"' + GLOBAL_ResumeURL + '\">Click here to see PDF.</a></p>' +
         '</object>' +
         '</div>');
     $pdfPopup.prependTo($('#css-jacobbrown')[0]);
 
-    setTimeout(function () {popupVisible = true;}, 100);
+    setTimeout(function () {GLOBAL_PopupVisible = true;}, 100);
 }
 
-
+// If the PDF popup is open, onClick for closing popup menu.
 $(document).click(function() {
 
-    if (popupVisible) {
-        var $popup = $(".popup");
+    if (GLOBAL_PopupVisible) {
+        let $popup = $(".popup");
         $popup.remove();
-        popupVisible = false;
+        GLOBAL_PopupVisible = false;
     }
 
 });
 
+// Stops popup menu from closing when popup is closing.
 $(".popup").click(function(e) {
     e.stopPropagation();
     return false;
 });
 
+/**
+ * Gets the currently viewed page.
+ * @returns {*}
+ */
 function grabParameter() {
 
-    var directoryString = location.search.split('/');
+    let directoryString = location.search.split('/');
 
     if(directoryString.length > 0) {
-
-        var explodedParameterString = directoryString[0].replace('?', '').toLowerCase();
-
-        return explodedParameterString;
-
+        return directoryString[0].replace('?', '').toLowerCase();
     }
 
     return undefined;
 
 }
 
-//
-//
-//
+///////////////////////////////////////////////////////////////////////////////////////
+// Loads the webpage of the parameter.
+///////////////////////////////////////////////////////////////////////////////////////
 $("#main-content").ready(function() {
 
-     var parameterString = grabParameter();
+    let parameterString = grabParameter();
 
-     if (parameterString === "home")
-         AnimationLoadHome();
-     else if (parameterString === "portfolio")
-         AnimationLoadPortfolio();
-     else if (parameterString === "bio")
-         AnimationLoadBio();
-     else if (parameterString === "game")
-         AnimationLoadGame();
-     else
-         AnimationLoadHome();
+    if (parameterString === "home")
+        AnimationLoadHome();
+    else if (parameterString === "portfolio")
+        AnimationLoadPortfolio();
+    else if (parameterString === "bio")
+        AnimationLoadBio();
+    else if (parameterString === "game")
+        AnimationLoadGame();
+    else
+        AnimationLoadHome();
 
 });
 
+/**
+ *  Loads the home page.
+ */
 function AnimationLoadHome() {
 
-    var $content = $("#main-content");
+    let $content = $("#main-content");
 
     $content.load("includes/main.html",function() {
 
@@ -400,9 +422,12 @@ function AnimationLoadHome() {
 
 }
 
+/**
+ * Loads the game page.
+ */
 function AnimationLoadGame() {
 
-    var $content = $("#main-content");
+    let $content = $("#main-content");
 
     $content.load("includes/game.html",function() {
 
@@ -411,9 +436,12 @@ function AnimationLoadGame() {
 
 }
 
+/**
+ * Loads the portfolio page.
+ */
 function AnimationLoadPortfolio () {
 
-    var $content = $("#main-content");
+    let $content = $("#main-content");
     $content.load("includes/portfolio.html", function() {
 
         $("#page-portfolio").velocity({opacity: 1.0}, {duration: 1000});
@@ -422,13 +450,13 @@ function AnimationLoadPortfolio () {
 
         $popup.mouseover(function () {
 
-            var $paragraphElement = $(this).find("p");
+            let $paragraphElement = $(this).find("p");
             $paragraphElement.velocity({wordSpacing: 15}, {duration: 500, queue:false});
 
         });
         $popup.mouseleave(function () {
 
-            var $paragraphElement = $(this).find("p");
+            let $paragraphElement = $(this).find("p");
             $paragraphElement.velocity({wordSpacing: 1}, {duration: 500, queue:false});
 
         });
@@ -437,11 +465,14 @@ function AnimationLoadPortfolio () {
 
 }
 
+/**
+ * Loads the bio page.
+ */
 function AnimationLoadBio() {
 
-    var $content = $("#main-content");
+    let $content = $("#main-content");
     $content.load("includes/bio.html", function() {
-        var $projectOverview = $(".project-overview");
+        let $projectOverview = $(".project-overview");
 
         $projectOverview.each(function(i, obj) {
 
@@ -456,7 +487,7 @@ function AnimationLoadBio() {
         ///////////////////////////////////////////////////////////////////////////////////////
         // Animations for project class animations.
         ///////////////////////////////////////////////////////////////////////////////////////
-        const $projects = $projectOverview.each(function(i, obj) {
+        $projectOverview.each(function(obj) {
 
             $(obj).mouseover(function () {
 

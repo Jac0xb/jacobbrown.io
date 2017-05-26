@@ -1,6 +1,6 @@
 #css-jacobbrown {
 
-    background-color: #1F1F1F;
+    background-color: #F0F0F0;
     background-position:center;
     background-repeat: repeat-x;
     background-attachment: fixed;
@@ -36,16 +36,18 @@
     margin: auto;
     border-bottom: 5px dashed #ffffff;
 
+
 }
 
 #main-nav-inferior li {
-    padding:auto;
     flex-grow: 100;
     flex-basis: 0;
     z-index: 5;
 }
 
 #main-nav-superior li {
+    display: table-cell;
+    vertical-align: middle;
     float: left;
     width:100px;
     padding: auto;
@@ -68,12 +70,12 @@
 #main-wrapper {
 
     background-color: #000000;
-    margin: 107px auto auto auto;
+    margin: 32px auto 32px auto;
     width: 450px;
     height: auto;
     z-index: 10;
-    zoom: 1.5;
-    -moz-transform: scale(1.5);
+    zoom: 1.25;
+    -moz-transform: scale(1.25);
 
 }
 
@@ -98,6 +100,7 @@
     vertical-align: middle;
     line-height: normal;
     font-size: 32px;
+    z-index: 1000;
 
 }
 
@@ -107,6 +110,7 @@
     text-decoration: none;
     padding: auto;
     color: white;
+    z-index: 1000;
 
 }
 
@@ -260,6 +264,33 @@ a:visited {
 .popup p {
 
     margin: 0;
+    font-family: 'Fira Sans', sans-serif;
     background-color: rgba(0,0,0,100);
+
+}
+
+#background-code {
+
+    position:fixed;
+    left:64px;
+    top:0px;
+    z-index: -1000;
+    font-family: 'Consolas', sans-serif;
+    font-size: 10px;
+
+}
+
+#background-code-line {
+
+    position:fixed;
+    left:5px;
+    top:0;
+    margin: auto;
+    padding-right: 5px;
+    font-family: 'Consolas', sans-serif;
+    font-size: 10px;
+    text-align: right;
+    color: rgb(43,145,175);
+
 
 }

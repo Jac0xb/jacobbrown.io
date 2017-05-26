@@ -1,0 +1,92 @@
+{end}
+/// {end}
+/// Begins waiting for a string, when a line is received by the socket{end}
+/// the callback method with the payload, line are executed.{end}
+/// {end}
+public void BeginReceive(ReceiveCallback callback, object payload, int length = 0){end}
+{{end}
+{end}
+^// If socket is closed, callback invoked with false and payload.{end}
+^if (!socket.Connected){end}
+^{{end}
+^^callback.Invoke(null, payload);{end}
+^}{end}
+{end}
+^// Locking up the callback queue.{end}
+^lock (callbackPriorityQueue){end}
+^{{end}
+{end}
+^^// New byte array.{end}
+^^byte[] passingBytes = new byte[512];{end}
+{end}
+^^// Since the queue index is used by multiple threads we in need to also lock it.{end}
+^^lock (queueIndex){end}
+^^{{end}
+^^^// A state is passed through the AsyncCallback and is used accordingly{end}
+^^^State state = new State(queueIndex.Value(), socket, callback, payload, new StringBuilder(), passingBytes);{end}
+{end}
+^^^// Add the callback to the priority queue.{end}
+^^^callbackPriorityQueue.Add(queueIndex.Value(), new KeyValuePair<ReceiveCallback, object>(callback, payload));{end}
+^^^queueIndex.Increment();{end}
+{end}
+^^^// Begin receiving bytes.{end}
+^^^socket.BeginReceive(passingBytes, 0, passingBytes.Length, SocketFlags.None, new AsyncCallback(Readline), state);{end}
+^^}{end}
+^}{end}
+{end}
+}{end}
+{end}
+/// {end}
+/// Called when data has been received.{end}
+/// {end}
+private void Readline(IAsyncResult result){end}
+{{end}
+{end}
+^// Grab the state.{end}
+^State currentState = result.AsyncState as State;{end}
+{end}
+^// Find out how many bits we need to read.{end}
+^int bytesRead = currentState.Socket.EndReceive(result);{end}
+{end}
+^// If 0, close.{end}
+^if (bytesRead == 0){end}
+^{{end}
+^^currentState.Socket.Close();{end}
+^}{end}
+^else{end}
+^{{end}
+{end}
+^^// Decode chars.{end}
+^^char[] chars = new char[512];{end}
+^^int decodedCharacters = decoder.GetChars(currentState.Bytes, 0, bytesRead, chars, 0);{end}
+^^currentState.StringBuilder.Append(chars, 0, decodedCharacters);{end}
+{end}
+^^// Start splitting up lines and adding them to a list of lines.{end}
+^^List<string> lines = new List<string>();{end}
+    ^^if (currentState.StringBuilder.ToString().Contains("\n")){end}
+    ^^{{end}
+    ^^^lock (elevator){end}
+    ^^^{{end}
+    ^^^^// See above.{end}
+    ^^^^foreach (var word in currentState.StringBuilder.ToString().Split('\n')){end}
+    ^^^^{{end}
+    ^^^^^if (word.Equals("")){end}
+    ^^^^^^continue;{end}
+    {end}
+    ^^^^^lines.Add((word));{end}
+    {end}
+    ^^^^}{end}
+    ^^^^// Add lines to the 2d array. (Think floors of a building and rooms on a floor){end}
+    ^^^^elevator.AddFloor(currentState.Index, lines);{end}
+    ^^^}{end}
+    ^^}{end}
+    ^^else{end}
+    ^^{{end}
+    ^^^// We need to get more data.{end}
+    ^^^byte[] passingBytes = new byte[512];{end}
+    ^^^currentState.Bytes = passingBytes;{end}
+    ^^^socket.BeginReceive(passingBytes, 0, passingBytes.Length, SocketFlags.None, new AsyncCallback(Readline), currentState);{end}
+    ^^}{end}
+    {end}
+    ^}{end}
+    }

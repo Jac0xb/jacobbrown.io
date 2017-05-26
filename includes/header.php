@@ -17,7 +17,7 @@
         <li><p id="main-nav-contact"><strike>contact</strike></p></li>
     </ul>
     <ul id="main-nav-inferior">
-        <li><p style="font-size:14px" id="main-nav-game"><strike>active<br>gamedev</strike></p></li>
+        <li><p style="font-size:14px" id="main-nav-game">gamedev</p></li>
         <li><p  style="font-size:14px" id="main-nav-credits"><strike>contributions</strike></p></li>
         <li><p style="font-size:14px" id="main-nav-etc"><strike>etc. etc.</strike></p></li>
     </ul>

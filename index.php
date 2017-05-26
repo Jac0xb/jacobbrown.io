@@ -9,9 +9,6 @@
 
 <head>
 
-    <link rel="icon" type="image/png"
-          href="assets/images/silk_icons/application_xp_terminal.png" />
-
     <!-- Loading Fonts from Google -->
     <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
@@ -19,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
     <!-- Loading JQuery Library -->
-    <script src="http://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="      crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="      crossorigin="anonymous"></script>
 
     <!-- Loading VelocityJS Library -->
     <script src="includes/libraries/velocity.js" type="text/javascript"></script>
@@ -49,6 +46,10 @@
 allows a JS function to be ran when element is fully loaded. -->
 <body onload="funcAnimation()" id="css-jacobbrown">
 
+<div id="background-code-line"></div>
+<div id="background-code" style="color:#F0F0F0;">
+
+</div>
 
 <!-- The 'wrapper' element around the site contenet. -->
 <div id="main-wrapper">
