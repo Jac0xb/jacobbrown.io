@@ -47,8 +47,24 @@ allows a JS function to be ran when element is fully loaded. -->
 <body onload="funcAnimation()" id="css-jacobbrown">
 
 <div id="background-code-line"></div>
-<div id="background-code" style="color:#F0F0F0;">
-
+<div id="background-code" style="color:#F0F0F0;"></div>
+<div id="settings-menu">
+    <div id="setting-menu-close">
+        <div style="margin:8px; border:solid;" >Close</div>
+    </div>
+    <div class="setting-menu-containers">
+        <div class="setting-menu-item">Typing Animation Speed</div>
+        <div class="setting-menu-item"><form id="setting-menu-form-1">
+                <input defaultValue="100" min="10" max="1000" style="vertical-align:middle;" id="setting-menu-form-1-input" type="range">
+                <input class="setting-menu-item-submit" style="margin-left: 20px;" type="submit" value="Update"></form></div>
+    </div>
+    <div class="setting-menu-containers">
+        <div class="setting-menu-item">Typing Animation Speed</div>
+        <div class="setting-menu-item">
+            <form id="setting-menu-form-2">
+                <input defaultValue="100" min="10" max="1000" style="vertical-align:middle;" id="setting-menu-form-2-input" type="range">
+                <input class="setting-menu-item-submit" style="margin-left: 20px;" type="submit" value="Update"></form></div>
+    </div>
 </div>
 
 <!-- The 'wrapper' element around the site contenet. -->

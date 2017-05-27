@@ -1,6 +1,8 @@
 let GLOBAL_FloaterInterval = 2500;
 let GLOBAL_ResumeURL = "assets/Brown,%20Jacob%20-%20Resume%20(5.24.2017).pdf";
-let GLOBAL_TypingSpeeds = [50,500];
+let GLOBAL_CurrentPage = "";
+let GLOBAL_TypingSpeeds = [50,250];
+let GLOBAL_TypingBackgrounds = [1,5];
 let GLOBAL_TypingEnabled = true;
 let GLOBAL_PopupVisible = false;
 
@@ -84,84 +86,167 @@ function createFloaters() {
 
 // Runs when HTML document is loaded.
 // Initializes the hooks/automated animations for the webpage.
+
 $(document).ready(function() {
+
+
+    $(".logo-node").click( function() {
+
+        AnimationLoadHome();
+
+    });
+
+    //
+    // Footer personal information protection
+    //
+    $("#footer-phonenumber").hover(function() {
+
+        $(this).text("phone number 1 (801) 822-1809");
+
+    });
+
+    $("#footer-email").hover(function() {
+
+        $(this).text("email jacobbrown41@outlook.com");
+
+    });
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Background coding animation load up.
     ///////////////////////////////////////////////////////////////////////////////////////
-    $("#background-code").load("includes/backgroundCode-" + RandomInteger(1,2) + ".html", function() {
+    generateBackground();
+    function generateBackground() {
 
-        // Declaring
-        let $code = $("#background-code");
-        let modifiedHTML = "";
-        let absIndex = 0;
-        let newlineArrays = {};
+        $("#background-code").load("includes/codebackgrounds/backgroundCode-" + RandomInteger(GLOBAL_TypingBackgrounds[0], GLOBAL_TypingBackgrounds[1]) + ".html", function () {
 
-        let span = '<span style="display:inline-block; width: 25px;"></span>';
-        $code.html().split('{end}').forEach(function(currLine, index) {
+            // Declaring variables needed to parse HTML files into animation format.
+            let $code = $("#background-code");
+            $code.css('opacity','1.0');
+            let modifiedHTML = "";
+            let absIndex = 0;
+            let newlineArrays = {};
 
-            newlineArrays[index] = absIndex;
+            let span = '<span style="display:inline-block; width: 25px;"></span>';
+            $code.html().split('{end}').forEach(function (currLine, index) {
 
-            currLine.split('').forEach(function(currChar) {
+                newlineArrays[index] = absIndex;
 
-                // '^' Tab character replacement.
-                if (currChar === '^')
-                    currChar = span;
+                let symbolIndices = [];
+                let symbolStack = [];
 
-                absIndex++;
-                modifiedHTML = modifiedHTML + '<span style="color:#F0F0F0; background-color:#F0F0F0;" id="background-code-node-' + absIndex + '\">' + currChar + '</span>';
+                if (currLine.includes("&lt;") || currLine.includes("&gt;")) {
+
+
+                    let regexLessThan = new RegExp("&lt;", 'gi');
+                    let regexGreaterThan = new RegExp("&gt;", 'gi');
+
+                    while (regexLessThan.exec(currLine) && regexGreaterThan.exec(currLine)) {
+                        symbolIndices.push(( regexLessThan.lastIndex - 4 ));
+                        symbolStack.push("&lt;");
+                        symbolIndices.push(( regexGreaterThan.lastIndex - 4 ));
+                        symbolStack.push("&gt;");
+                    }
+                }
+
+                let floorIndex = 0;
+                let ignoreIndex = -1;
+                let ignoreLength = -1;
+
+                if (symbolIndices.length > 0) {
+                    ignoreIndex = symbolIndices[floorIndex];
+                }
+
+                currLine.split('').forEach(function (currChar, charIndex) {
+
+                    if (charIndex === ignoreIndex)
+                        ignoreLength = 3;
+
+
+                    if (ignoreLength > 0) {
+                        ignoreLength--;
+                        return;
+
+                    }
+
+                    if (ignoreLength === 0) {
+                        absIndex++;
+                        modifiedHTML = modifiedHTML + '<span style="color:#F0F0F0; background-color:#F0F0F0;" id="background-code-node-' + absIndex + '\">' + symbolStack[floorIndex] + '</span>';
+                        ignoreIndex = symbolIndices[++floorIndex];
+                        ignoreLength = -1;
+                        return;
+                    }
+
+                    // '^' Tab character replacement.
+                    if (currChar === '^')
+                        currChar = span;
+
+                    absIndex++;
+                    modifiedHTML = modifiedHTML + '<span style="color:#F0F0F0; background-color:#F0F0F0;" id="background-code-node-' + absIndex + '\">' + currChar + '</span>';
+
+                });
+
+                modifiedHTML = modifiedHTML + "<br>";
 
             });
 
-            modifiedHTML = modifiedHTML + "<br>";
+            $code.html(modifiedHTML);
+
+            // Code line manipulation.
+            let $codeLines = $("#background-code-line");
+            $codeLines.css("opacity","1.0")
+
+            for (let line in newlineArrays) {
+                $codeLines.html($codeLines.html() + '<span id=\"background-code-line-' + line + '\" style="opacity: 0">' + ( parseInt(line) + 1) + "</span>" + "<br>");
+            }
+
+            // Variables for the typing animations.
+            let currNode = 0;
+            let line = 0;
+            let currNextLine = -1;
+            $("#background-code-line-0").velocity({opacity: 1.0}, {queue: false, duration: 100});
+
+            if (GLOBAL_TypingEnabled)
+                setTimeout(typeAnimation, 200);
+
+            // Simulates the typing of code in the background.
+            function typeAnimation() {
+
+                if (currNextLine < 0) {
+                    currNextLine = newlineArrays[line++];
+                }
+
+                if (currNode >= currNextLine) {
+
+                    let $currLine = $("#background-code-line-" + line);
+                    $currLine.velocity({opacity: 1.0}, {queue: false, duration: 100});
+                    currNextLine = -1;
+
+                }
+
+                // Animation of the code.
+                let $currNodeElement = $("#background-code-node-" + currNode);
+                $currNodeElement.velocity({color: "#000"}, {queue: false, duration: 100});
+                $currNodeElement.velocity({backgroundColor: ["#F0F0F0", "#000"]}, {queue: false, duration: 300});
+
+                currNode++;
+
+                if (currNode > absIndex) {
+                    let $codeElement = $("#background-code");
+                    $codeElement.velocity({opacity: '0.0'}, {duration: 10000, complete: function() {$codeElement.empty();}});
+                    let $codeLineElement = $("#background-code-line");
+                    $codeLineElement.velocity({opacity: '0.0'}, {duration: 10000, complete: function() {$codeLineElement.empty();}});
+                    setTimeout(function(){generateBackground();},10100);
+
+                    return;
+                }
+                if (GLOBAL_TypingEnabled)
+                    setTimeout(typeAnimation, RandomInteger(GLOBAL_TypingSpeeds[0], GLOBAL_TypingSpeeds[1]));
+
+            }
 
         });
 
-        $code.html(modifiedHTML);
-
-        // Code line manipulation.
-        let $codeLines = $("#background-code-line");
-        for(let line in newlineArrays) {
-            $codeLines.html($codeLines.html() + '<span id=\"background-code-line-' + line + '\" style="opacity: 0">' + ( parseInt(line) + 1) + "</span>" + "<br>");
-        }
-
-        // Variables for the typing animations.
-        let currNode = 0;
-        let line = 0;
-        let currNextLine = -1;
-        $("#background-code-line-0").velocity({opacity:1.0}, {queue: false, duration: 100});
-
-        if (GLOBAL_TypingEnabled)
-        setTimeout(typeAnimation, 200);
-
-        // Simulates the typing of code in the background.
-        function typeAnimation() {
-
-            if (currNextLine < 0) {
-                currNextLine = newlineArrays[line++];
-            }
-
-            if (currNode >= currNextLine) {
-
-                let $currLine = $("#background-code-line-" + line);
-                $currLine.velocity({opacity:1.0}, {queue: false, duration: 100});
-                currNextLine = -1;
-
-            }
-
-            // Animation of the code.
-            let $currNode = $("#background-code-node-" + currNode);
-            $currNode.velocity({color:"#000"}, {queue: false, duration: 100});
-            $currNode.velocity({backgroundColor:["#F0F0F0","#000"]}, {queue: false, duration: 300});
-
-            currNode++;
-
-            if (GLOBAL_TypingEnabled)
-            setTimeout(typeAnimation, RandomInteger(GLOBAL_TypingSpeeds[0],GLOBAL_TypingSpeeds[1]));
-
-        }
-
-    });
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Navigation animations.
@@ -177,7 +262,8 @@ $(document).ready(function() {
     $navButtons.mouseover(function () {
 
         // Styling changes, defaults.
-        this.style.zIndex = 0;
+        $(this).attr('z-index', 30);
+        $(this).attr('cursor', 'pointer');
 
         // Getting the paragraph inside the navigation list element.
         const $text = $(this).find("p");
@@ -220,7 +306,8 @@ $(document).ready(function() {
     // Mouse leave navigation elements.
     $navButtons.mouseleave(function () {
 
-        this.style.zIndex = 5;
+        $(this).attr('z-index', 0);
+        $(this).attr('cursor', 'pointer');
         const $text = $(this).find("p");
         $text.active = false;
         clearInterval(timerArray[$text.text()]);
@@ -235,6 +322,9 @@ $(document).ready(function() {
     /// onClick event for home button.
     $("#main-nav-home").on("click", function() {
 
+        if (GLOBAL_CurrentPage === "home")
+            return;
+
         event.preventDefault();
 
         window.history.pushState({}, 'jacobrown.io - Home', '?home');
@@ -244,6 +334,9 @@ $(document).ready(function() {
 
     /// onClick event for game button.
     $("#main-nav-game").on("click", function() {
+
+        if (GLOBAL_CurrentPage === "game")
+            return;
 
         event.preventDefault();
 
@@ -255,6 +348,9 @@ $(document).ready(function() {
     /// onClick event for portfolio button.
     $("#main-nav-portfolio").on("click", function() {
 
+        if (GLOBAL_CurrentPage === "portfolio")
+            return;
+
         event.preventDefault();
 
         window.history.pushState({}, 'jacobrown.io - Portfolio', '?portfolio');
@@ -265,10 +361,32 @@ $(document).ready(function() {
     /// onClick event for bio button.
     $("#main-nav-bio").on("click", function() {
 
+        if (GLOBAL_CurrentPage === "bio")
+            return;
+
         event.preventDefault();
 
         window.history.pushState({}, 'jacobrown.io - Bio', '?bio');
         AnimationLoadBio();
+
+    });
+
+    //
+    // Settings menu events
+    //
+
+    $("#settings-menu-icon").on("click", function() {
+
+        console.log("Clicked");
+
+    });
+
+    $('#setting-menu-form-1').submit(function () {
+        event.preventDefault();
+
+        GLOBAL_TypingSpeeds[0] = (100 - (parseInt($('#setting-menu-form-1-input').val())))/3 ;
+        GLOBAL_TypingSpeeds[1] = (100 - (parseInt($('#setting-menu-form-1-input').val())))/3 ;
+        return false;
 
     });
 
@@ -277,9 +395,9 @@ $(document).ready(function() {
     // Animation for old portfolio page.
     ///////////////////////////////////////////////////////////////////////////////////////
     /**
-    var $circle = $(".timeline-circle");
+     var $circle = $(".timeline-circle");
 
-    $circle.mouseover(function () {
+     $circle.mouseover(function () {
 
         $(this)
             .velocity("stop")
@@ -288,13 +406,13 @@ $(document).ready(function() {
 
 
     });
-    $circle.mouseleave(function () {
+     $circle.mouseleave(function () {
 
         $(this)
             .velocity("stop")
             .velocity({opacity:1.0}, {duration: 500});
     });
-    **/
+     **/
     ///////////////////////////////////////////////////////////////////////////////////////
 // Animation for old portfolio page.
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -309,9 +427,9 @@ $(document).ready(function() {
 }
      **/
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // Animation for banner logo.
-    ///////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // Animation for banner logo.
+        ///////////////////////////////////////////////////////////////////////////////////////
 
     const $logoSection = $("#main-banner-logo").find("p");
 
@@ -324,7 +442,6 @@ $(document).ready(function() {
     });
 
 });
-
 
 /**
  * Given a range, returns a random integer within range.
@@ -413,6 +530,8 @@ $("#main-content").ready(function() {
  */
 function AnimationLoadHome() {
 
+    GLOBAL_CurrentPage = "home";
+
     let $content = $("#main-content");
 
     $content.load("includes/main.html",function() {
@@ -427,6 +546,8 @@ function AnimationLoadHome() {
  */
 function AnimationLoadGame() {
 
+    GLOBAL_CurrentPage = "game";
+
     let $content = $("#main-content");
 
     $content.load("includes/game.html",function() {
@@ -440,6 +561,8 @@ function AnimationLoadGame() {
  * Loads the portfolio page.
  */
 function AnimationLoadPortfolio () {
+
+    GLOBAL_CurrentPage = "portfolio";
 
     let $content = $("#main-content");
     $content.load("includes/portfolio.html", function() {
@@ -470,28 +593,31 @@ function AnimationLoadPortfolio () {
  */
 function AnimationLoadBio() {
 
+    GLOBAL_CurrentPage = "bio";
+
     let $content = $("#main-content");
     $content.load("includes/bio.html", function() {
+
         let $projectOverview = $(".project-overview");
 
         $projectOverview.each(function(i, obj) {
 
-            $(obj).velocity({opacity: 1.0}, {duration: 1000});
+            $(obj).velocity({opacity: [1.0,0]}, {duration: 1000});
 
         });
 
         const $projectImages = $(".project-image");
 
-        $projectImages.velocity({opacity: 1.0}, {easing: [4]});
+        $projectImages.velocity({opacity: [1.0,0]}, {easing: [4]});
 
         ///////////////////////////////////////////////////////////////////////////////////////
         // Animations for project class animations.
         ///////////////////////////////////////////////////////////////////////////////////////
-        $projectOverview.each(function(obj) {
+        $projectOverview.each(function(i, obj) {
 
             $(obj).mouseover(function () {
 
-                this.style.zIndex = 10;
+                this.style.zIndex = 100;
 
                 $(this)
                     .velocity("stop")
@@ -502,7 +628,7 @@ function AnimationLoadBio() {
             });
             $(obj).mouseleave(function () {
 
-                this.style.zIndex = 1;
+                this.style.zIndex = 0;
 
                 $(this)
                     .velocity("stop")

@@ -2,8 +2,12 @@
 
     <div>
 
-        phone number 18018221809<br>
-        email jacobbrown [at] outlook [dot] com<br>
+        <span id="footer-phonenumber">phone number (hover to see) </span>
+        <NOSCRIPT>Phone number is protected with Javascript to avoid bot scraping.</NOSCRIPT>
+        <br>
+        <span id="footer-email">email (hover to see) </span>
+        <NOSCRIPT>Email is protected with Javascript to avoid bot scraping.</NOSCRIPT>
+        <br>
         copyright jacob brown <node style="text-size:16px">&copy;</node> <?php date_default_timezone_set("America/Denver");        echo date("Y"); ?>
 
     </div>
