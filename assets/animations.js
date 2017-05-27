@@ -117,6 +117,9 @@ $(document).ready(function() {
     generateBackground();
     function generateBackground() {
 
+        // Disable mobile display of typing animation.
+        if (typeof window.orientation !== 'undefined') { return; }
+
         $("#background-code").load("includes/codebackgrounds/backgroundCode-" + RandomInteger(GLOBAL_TypingBackgrounds[0], GLOBAL_TypingBackgrounds[1]) + ".html", function () {
 
             // Declaring variables needed to parse HTML files into animation format.
@@ -135,7 +138,6 @@ $(document).ready(function() {
                 let symbolStack = [];
 
                 if (currLine.includes("&lt;") || currLine.includes("&gt;")) {
-
 
                     let regexLessThan = new RegExp("&lt;", 'gi');
                     let regexGreaterThan = new RegExp("&gt;", 'gi');
@@ -193,7 +195,7 @@ $(document).ready(function() {
 
             // Code line manipulation.
             let $codeLines = $("#background-code-line");
-            $codeLines.css("opacity","1.0")
+            $codeLines.css("opacity","1.0");
 
             for (let line in newlineArrays) {
                 $codeLines.html($codeLines.html() + '<span id=\"background-code-line-' + line + '\" style="opacity: 0">' + ( parseInt(line) + 1) + "</span>" + "<br>");
@@ -384,8 +386,10 @@ $(document).ready(function() {
     $('#setting-menu-form-1').submit(function () {
         event.preventDefault();
 
-        GLOBAL_TypingSpeeds[0] = (100 - (parseInt($('#setting-menu-form-1-input').val())))/3 ;
-        GLOBAL_TypingSpeeds[1] = (100 - (parseInt($('#setting-menu-form-1-input').val())))/3 ;
+        let menuSettings = $('#setting-menu-form-1-input').val();
+
+        GLOBAL_TypingSpeeds[0] = (100 - (parseInt(menuSettings)))/3 ;
+        GLOBAL_TypingSpeeds[1] = (100 - (parseInt(menuSettings)))/3 ;
         return false;
 
     });
@@ -614,6 +618,9 @@ function AnimationLoadBio() {
         // Animations for project class animations.
         ///////////////////////////////////////////////////////////////////////////////////////
         $projectOverview.each(function(i, obj) {
+
+            // Disable mobile display of project popup animation.
+            if (typeof window.orientation !== 'undefined') { return; }
 
             $(obj).mouseover(function () {
 
