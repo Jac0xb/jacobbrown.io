@@ -1,3 +1,61 @@
+@media screen and (max-width: 562px) {
+
+    #main-wrapper {
+
+        background-color: #000;
+        margin: 0;
+        width: auto;
+        height: auto;
+        z-index: 10;
+
+    }
+
+    .project-summary {
+
+        float:left;
+        padding: 10px 5px 10px 5px;
+        margin: auto;
+        background-color: #000000;
+        flex-grow: 100;
+        text-align:center;
+        color: white;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 10px;
+
+
+    }
+
+}
+
+@media screen and (min-width: 562px) {
+
+    #main-wrapper {
+
+        background-color: #000000;
+        margin: 32px auto 32px auto;
+        width: 450px;
+        height: auto;
+        z-index: 10;
+        zoom: 1.25;
+        -moz-transform: scale(1.25);
+
+    }
+
+    .project-summary {
+
+        float:left;
+        padding: 10px 5px 10px 5px;
+        margin: auto;
+        background-color: #000000;
+        flex-grow: 100;
+        text-align:center;
+        color: white;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 16px;
+    }
+
+}
+
 #css-jacobbrown {
 
     background-color: #F0F0F0;
@@ -64,18 +122,6 @@
     margin: 16px auto 16px auto;
     cursor:pointer;
     text-decoration: none;
-
-}
-
-#main-wrapper {
-
-    background-color: #000000;
-    margin: 32px auto 32px auto;
-    width: 450px;
-    height: auto;
-    z-index: 10;
-    zoom: 1.25;
-    -moz-transform: scale(1.25);
 
 }
 
@@ -157,7 +203,6 @@
     opacity: 0;
     display: flex;
     position: relative;
-    font-family: 'Open Sans', sans-serif;
 
 }
 
@@ -168,7 +213,7 @@
     width: 150px;
     height:150px;
     float:left;
-    padding: 10px 10px 0px 0px;
+    padding: 10px 10px 0 0;
 
 
 }
@@ -177,19 +222,6 @@
 
     width: 150px;
     height:150px;
-
-}
-
-.project-summary {
-
-    float:left;
-    padding: 10px 5px 10px 5px;
-    margin: auto;
-    background-color: #000000;
-    flex-grow: 100;
-    text-align:center;
-    color: white;
-
 
 }
 
@@ -264,7 +296,7 @@ a:visited {
     width: 70%;
     height: 100%;
     left: 50%;
-    top: 0%;
+    top: 0;
     transform: translate(-50%, 0);
     z-index: 1000;
     text-align: center;
@@ -279,11 +311,20 @@ a:visited {
 
 }
 
+.popup p:link {
+    color: white;
+}
+
+.popup p:visited {
+    color: white;
+}
+
+
 #background-code {
 
     position:fixed;
     left:64px;
-    top:0px;
+    top:0;
     z-index: -1000;
     font-family: 'Consolas', sans-serif;
     font-size: 10px;
