@@ -1,10 +1,6 @@
 <footer id="main-footer">
 
     <div>
-
-        <span id="footer-phonenumber">phone number (hover to see) </span>
-        <NOSCRIPT>Phone number is protected with Javascript to avoid bot scraping.</NOSCRIPT>
-        <br>
         <span id="footer-email">email (hover to see) </span>
         <NOSCRIPT>Email is protected with Javascript to avoid bot scraping.</NOSCRIPT>
         <br>

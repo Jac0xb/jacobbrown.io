@@ -101,7 +101,7 @@ $(document).ready(function() {
     //
     $("#footer-phonenumber").hover(function() {
 
-        $(this).text("phone number 1 (801) 822-1809");
+        //$(this).text("phone number ");
 
     });
 
@@ -273,19 +273,19 @@ $(document).ready(function() {
         const randomInt = RandomInteger(0,1000);
 
         // Normal animation.
-        if (randomInt <= 900 ) {
+        if (randomInt <= 950 ) {
             $text
                 .velocity("stop")
                 .velocity({scale: 2.0}, {queue: false, duration: 500});
         }
         // Rotation animation.
         else if (randomInt > 900 && randomInt <= 950) {
-            $text
-                .velocity("stop")
-                .velocity({scale: 2.0, rotateZ:360}, {queue: false, duration: 500});
+            //$text
+            //    .velocity("stop")
+            //    .velocity({scale: 2.0, rotateZ:360}, {queue: false, duration: 500});
         }
         // Color changing animation.
-        else if (randomInt > 950 && randomInt <= 1000) {
+        else if (randomInt > 950) {
 
             const ranColors = ['#0000ff', '#00ff00', '#ff0000'];
 
@@ -578,7 +578,7 @@ function AnimationLoadPortfolio () {
         $popup.mouseover(function () {
 
             let $paragraphElement = $(this).find("p");
-            $paragraphElement.velocity({wordSpacing: 15}, {duration: 500, queue:false});
+            $paragraphElement.velocity({wordSpacing: 1.5}, {duration: 500, queue:false});
 
         });
         $popup.mouseleave(function () {
